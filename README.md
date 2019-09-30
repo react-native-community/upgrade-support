@@ -31,6 +31,6 @@ You can browse the issues by filtering based on react-native [versions][issues-f
 
 [react-native-community]: https://github.com/react-native-community
 [react-native]: https://github.com/facebook/react-native
-[issues-filter-version]: https://github.com/react-native-community/upgrade-support
-[issues-filter-replied]: https://github.com/react-native-community/upgrade-support
+[issues-filter-version]: https://github.com/react-native-community/upgrade-support/issues?q=is%3Aissue+is%3Aopen+sort%3Aupdated-desc+label%3A0.61.1
+[issues-filter-replied]: https://github.com/react-native-community/upgrade-support/issues?q=is%3Aissue+is%3Aopen+sort%3Aupdated-desc+label%3A%22%F0%9F%8E%89+Replied%22
 [license]: ./LICENSE
