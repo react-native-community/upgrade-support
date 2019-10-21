@@ -1,5 +1,7 @@
 name: Autocloser
-on: [issues, pull_request]
+on:
+  issues:
+    types: [edited]
 jobs:
   autoclose:
     runs-on: ubuntu-latest
