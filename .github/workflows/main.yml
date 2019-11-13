@@ -13,4 +13,4 @@ jobs:
       with:
         repo-token: ${{ secrets.GITHUB_TOKEN }}
         issue-close-message: "@${issue.user.login} this issue was automatically closed because it did not follow the issue template."
-        issue-pattern: "^(?=.*\bEnvironment\b)(?=.*\bUpgrading version\b)(?=.*\bDescription\b)(?=.*\bReproducible demo\b).*$"
+        issue-pattern: ".*guidelines for Contributing.*"
