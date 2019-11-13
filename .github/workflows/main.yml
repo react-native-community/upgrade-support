@@ -1,17 +1,15 @@
-name: Greeting from Mona
+name: Autocloser
 
-on: push
+on:
+  issues:
+    types: [edited]
 
 jobs:
-  my-job:
-    name: My Job
+  autoclose:
     runs-on: ubuntu-latest
     steps:
-    - name: Print a greeting
-      env:
-        MY_VAR: Hi there! My name is
-        FIRST_NAME: Test
-        MIDDLE_NAME: The
-        LAST_NAME: Octocat
-      run: |
-        echo $MY_VAR $FIRST_NAME $MIDDLE_NAME $LAST_NAME.
+    - name: Autoclose issues that do not follow the issue template
+      uses: roots/issue-closer@v1.1
+      with:
+        repo-token: ${{ secrets.GITHUB_TOKEN }}
+        issue-close-message: "@${issue.user.login} this issue was automatically closed because it did not follow the issue template."
