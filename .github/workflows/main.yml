@@ -1,14 +1,15 @@
-name: Autocloser
 on:
   issues:
-      types: [opened, edited]
+    types: [opened, edited]
+
 jobs:
-  autoclose:
+  auto_close_issues:
     runs-on: ubuntu-latest
     steps:
-    - name: Autoclose issues that did not follow issue template
-      uses: roots/issue-closer@v1.1
-      with:
-        repo-token: ${{ secrets.GITHUB_TOKEN }}
-        issue-close-message: "@${issue.user.login} this issue was automatically closed because it did not follow the issue template"
-        issue-pattern: ".*guidelines for Contributing.*"
+      - name: Checkout
+        uses: actions/checkout@v1
+      - name: Automatically close issues that don't follow the issue template
+        uses: lucasbento/auto-close-issues@v1.0.2
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          closed-issues-label: "🙁 Not following issue template"
