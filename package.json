@@ -17,7 +17,7 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "yarn build:actions"
+      "pre-commit": "yarn build:actions; git add actions/dist/*.js"
     }
   },
   "license": "MIT",
