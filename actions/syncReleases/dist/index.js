@@ -4588,7 +4588,7 @@ const semver = __webpack_require__(876);
     .split("\n");
 
   const releasesAfterLastSynced = releases.filter(
-    release => semver.valid(release) && semver.gt(release, lastSyncedRelease)
+    release => !!release && semver.gt(release, lastSyncedRelease)
   );
 
   core.debug(`Last released after last sync: ${releasesAfterLastSynced[0]}`);
