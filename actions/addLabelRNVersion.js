@@ -11,7 +11,7 @@ const searchForVersion = upgradingVersionSection => {
     return;
   }
 
-  return versions[0].replace(/\.0+$/m, "");
+  return versions[0];
 };
 
 (async () => {
