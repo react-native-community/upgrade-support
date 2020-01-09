@@ -18,15 +18,15 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "yarn build:actions; git add actions/dist/*"
+      "pre-commit": "yarn build:actions; git add actions/**/dist/*"
     }
   },
   "license": "MIT",
   "main": "dist/index.js",
   "repository": "https://github.com/react-native-community/upgrade-support",
   "scripts": {
-    "build:addLabelRNVersion": "ncc build actions/addLabelRNVersion.js --out actions/dist/addLabelRNVersion",
-    "build:syncReleases": "ncc build actions/syncReleases.js --out actions/dist/syncReleases",
+    "build:addLabelRNVersion": "ncc build actions/addLabelRNVersion/*.js --out actions/addLabelRNVersion/dist",
+    "build:syncReleases": "ncc build actions/syncReleases/*.js --out actions/syncReleases/dist",
     "build:actions": "yarn build:addLabelRNVersion && yarn build:syncReleases"
   }
 }
