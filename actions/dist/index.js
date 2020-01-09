@@ -1717,6 +1717,8 @@ const searchForVersion = upgradingVersionSection => {
     issue_number: issue.number
   });
 
+  core.debug(JSON.stringify({ updatedIssue }));
+
   if (updatedIssue.state === "closed") {
     // Do nothing if the issue has been closed
     return;
@@ -1733,15 +1735,18 @@ const searchForVersion = upgradingVersionSection => {
 
     const version = searchForVersion(upgradingVersionSection);
 
+    core.debug(JSON.stringify({ version }));
+
     const { data: labels } = await client.issues.listLabelsOnIssue({
       owner: issue.owner,
       repo: issue.repo,
       issue_number: issue.number
     });
 
+    core.debug(JSON.stringify({ labels }));
+
     await Promise.all(
       labels.map(async ({ name }) => {
-        // Figure out how to kill the code here as the label is already defined
         if (name === version) {
           return;
         }
