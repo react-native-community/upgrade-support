@@ -1,3 +1,5 @@
+name: Issue handling
+
 on:
   issues:
     types: [opened, edited]
@@ -13,6 +15,12 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           closed-issues-label: "🙁 Not following issue template"
+  add_label_rn_version:
+    runs-on: ubuntu-latest
+    needs: auto_close_issues
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v1
       - name: Add label with the React Native version
         uses: ./actions/addLabelRNVersion
         with:
