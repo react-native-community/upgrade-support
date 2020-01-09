@@ -51,7 +51,7 @@ const semver = require("semver/preload");
     // The last release is the first entry as the list is sorted backwards
     const [lastRelease] = releasesAfterLastSynced;
 
-    await client.repos.updateFile({
+    await client.repos.createOrUpdateFile({
       owner: "react-native-community",
       repo: "upgrade-support",
       content: lastRelease,
