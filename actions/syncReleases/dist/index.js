@@ -5715,6 +5715,11 @@ const core = __webpack_require__(470);
 const github = __webpack_require__(469);
 const semver = __webpack_require__(381);
 
+const fetchFileContentParams = {
+  owner: "react-native-community",
+  repo: "upgrade-support"
+};
+
 (async () => {
   const client = new github.GitHub(
     core.getInput("github-token", { required: true })
@@ -5723,7 +5728,7 @@ const semver = __webpack_require__(381);
   const {
     data: { content }
   } = await client.repos.getContents({
-    owner: "react-native-community",
+    ...fetchFileContentParams,
     repo: "rn-diff-purge",
     path: "RELEASES"
   });
@@ -5763,12 +5768,19 @@ const semver = __webpack_require__(381);
     // The last release is the first entry as the list is sorted backwards
     const [lastRelease] = releasesAfterLastSynced;
 
+    const {
+      data: { sha }
+    } = await client.repos.getContents({
+      ...fetchFileContentParams,
+      path: ".lastsynced"
+    });
+
     await client.repos.createOrUpdateFile({
-      owner: "react-native-community",
-      repo: "upgrade-support",
+      ...fetchFileContentParams,
       content: lastRelease,
       message: "Update release versions",
-      path: ".lastsynced"
+      path: ".lastsynced",
+      sha
     });
   } catch (error) {
     core.setFailed(error.message);

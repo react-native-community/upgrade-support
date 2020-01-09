@@ -3,6 +3,11 @@ const core = require("@actions/core");
 const github = require("@actions/github");
 const semver = require("semver/preload");
 
+const fetchFileContentParams = {
+  owner: "react-native-community",
+  repo: "upgrade-support"
+};
+
 (async () => {
   const client = new github.GitHub(
     core.getInput("github-token", { required: true })
@@ -11,7 +16,7 @@ const semver = require("semver/preload");
   const {
     data: { content }
   } = await client.repos.getContents({
-    owner: "react-native-community",
+    ...fetchFileContentParams,
     repo: "rn-diff-purge",
     path: "RELEASES"
   });
@@ -51,12 +56,19 @@ const semver = require("semver/preload");
     // The last release is the first entry as the list is sorted backwards
     const [lastRelease] = releasesAfterLastSynced;
 
+    const {
+      data: { sha }
+    } = await client.repos.getContents({
+      ...fetchFileContentParams,
+      path: ".lastsynced"
+    });
+
     await client.repos.createOrUpdateFile({
-      owner: "react-native-community",
-      repo: "upgrade-support",
+      ...fetchFileContentParams,
       content: lastRelease,
       message: "Update release versions",
-      path: ".lastsynced"
+      path: ".lastsynced",
+      sha
     });
   } catch (error) {
     core.setFailed(error.message);
