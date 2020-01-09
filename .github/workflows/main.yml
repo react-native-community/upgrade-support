@@ -14,6 +14,6 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           closed-issues-label: "🙁 Not following issue template"
       - name: Add label with the React Native version
-        uses: ./
+        uses: ./actions/dist/addLabelRNVersion/index.js
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
