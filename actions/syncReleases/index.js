@@ -1,7 +1,7 @@
 const fs = require("fs");
 const core = require("@actions/core");
 const github = require("@actions/github");
-const semver = require("semver");
+const semver = require("semver/preload");
 
 (async () => {
   const client = new github.GitHub(
@@ -25,7 +25,7 @@ const semver = require("semver");
     .split("\n");
 
   const releasesAfterLastSynced = releases.filter(
-    release => !!release && semver.gt(release, lastSyncedRelease)
+    release => semver.valid(release) && semver.gt(release, lastSyncedRelease)
   );
 
   core.debug(`Last released after last sync: ${releasesAfterLastSynced[0]}`);
