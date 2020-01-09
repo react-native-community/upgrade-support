@@ -1,8 +1,8 @@
 name: Synchronise release versions
 
 on:
-  issues:
-    types: [edited] # for testing
+  schedule:
+    - cron: "15 * * * *"
 
 jobs:
   sync_releases:
