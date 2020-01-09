@@ -1,0 +1,16 @@
+name: Synchronise release versions
+
+on:
+  issues:
+    types: [edited] # for testing
+
+jobs:
+  sync_releases:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v1
+      - name: Sync releases
+        uses: ./actions/syncReleases
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
