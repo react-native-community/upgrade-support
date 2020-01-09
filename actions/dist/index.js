@@ -1717,10 +1717,10 @@ const searchForVersion = upgradingVersionSection => {
     issue_number: issue.number
   });
 
-  core.debug(JSON.stringify({ updatedIssue }));
-
   if (updatedIssue.state === "closed") {
     // Do nothing if the issue has been closed
+    core.debug("Issue already closed");
+
     return;
   }
 
@@ -1735,7 +1735,13 @@ const searchForVersion = upgradingVersionSection => {
 
     const version = searchForVersion(upgradingVersionSection);
 
-    core.debug(JSON.stringify({ version }));
+    if (!version) {
+      core.debug("No version found.");
+
+      return;
+    }
+
+    core.debug(`Found version: ${version}`);
 
     const { data: labels } = await client.issues.listLabelsOnIssue({
       owner: issue.owner,
@@ -1743,15 +1749,15 @@ const searchForVersion = upgradingVersionSection => {
       issue_number: issue.number
     });
 
-    core.debug(JSON.stringify({ labels }));
-
     await Promise.all(
       labels.map(async ({ name }) => {
         if (name === version) {
-          return;
+          throw new Error("Version already added to issue.");
         }
 
         if (searchForVersion(name)) {
+          core.debug("Removing outdated version from issue");
+
           return await client.issues.removeLabel({
             owner: issue.owner,
             repo: issue.repo,
@@ -1761,11 +1767,6 @@ const searchForVersion = upgradingVersionSection => {
         }
       })
     );
-
-    if (!version) {
-      // No version found, do nothing
-      return;
-    }
 
     try {
       await client.issues.getLabel({
@@ -1782,6 +1783,8 @@ const searchForVersion = upgradingVersionSection => {
       });
     } catch (_error) {
       // Label does not exist, do nothing
+      core.debug("Label with version does not exist");
+
       return;
     }
   } catch (error) {
