@@ -4579,7 +4579,7 @@ const semver = __webpack_require__(876);
     path: "RELEASES"
   });
 
-  const lastSyncedRelease = fs.readFileSync(".lastsync", "utf-8");
+  const lastSyncedRelease = fs.readFileSync(".lastsynced", "utf-8");
 
   core.debug(`Last synced released: ${lastSyncedRelease}`);
 
