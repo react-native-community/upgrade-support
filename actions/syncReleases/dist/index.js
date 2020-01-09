@@ -5777,7 +5777,7 @@ const fetchFileContentParams = {
 
     await client.repos.createOrUpdateFile({
       ...fetchFileContentParams,
-      content: lastRelease,
+      content: Buffer.from(lastRelease).toString("base64"),
       message: "Update release versions",
       path: ".lastsynced",
       sha
