@@ -26,7 +26,7 @@
   "repository": "https://github.com/react-native-community/upgrade-support",
   "scripts": {
     "build:addLabelRNVersion": "ncc build actions/addLabelRNVersion/*.js --out actions/addLabelRNVersion/dist",
-    "build:syncReleases": "ncc build actions/syncReleases/*.js --out actions/syncReleases/dist",
-    "build:actions": "yarn build:addLabelRNVersion && yarn build:syncReleases"
+    "build:newRelease": "ncc build actions/newRelease/*.js --out actions/newRelease/dist",
+    "build:actions": "yarn build:addLabelRNVersion && yarn build:newRelease"
   }
 }

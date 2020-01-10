@@ -34,7 +34,7 @@ module.exports =
 /******/ 	// the startup function
 /******/ 	function startup() {
 /******/ 		// Load entry module and return exports
-/******/ 		return __webpack_require__(395);
+/******/ 		return __webpack_require__(803);
 /******/ 	};
 /******/
 /******/ 	// run startup
@@ -5246,7 +5246,7 @@ module.exports = {
   inc: __webpack_require__(928),
   diff: __webpack_require__(822),
   major: __webpack_require__(744),
-  minor: __webpack_require__(803),
+  minor: __webpack_require__(515),
   patch: __webpack_require__(677),
   prerelease: __webpack_require__(968),
   compare: __webpack_require__(874),
@@ -5703,89 +5703,6 @@ function readShebang(command) {
 }
 
 module.exports = readShebang;
-
-
-/***/ }),
-
-/***/ 395:
-/***/ (function(__unusedmodule, __unusedexports, __webpack_require__) {
-
-const fs = __webpack_require__(747);
-const core = __webpack_require__(470);
-const github = __webpack_require__(469);
-const semver = __webpack_require__(381);
-
-const fetchFileContentParams = {
-  owner: "react-native-community",
-  repo: "upgrade-support"
-};
-
-(async () => {
-  const client = new github.GitHub(
-    core.getInput("github-token", { required: true })
-  );
-
-  const {
-    data: { content }
-  } = await client.repos.getContents({
-    ...fetchFileContentParams,
-    repo: "rn-diff-purge",
-    path: "RELEASES"
-  });
-
-  const lastSyncedRelease = fs.readFileSync(".lastsynced", "utf-8");
-
-  core.debug(`Last synced released: ${lastSyncedRelease}`);
-
-  const releases = Buffer.from(content, "base64")
-    .toString("ascii")
-    .split("\n");
-
-  const releasesAfterLastSynced = releases.filter(
-    release => semver.valid(release) && semver.gt(release, lastSyncedRelease)
-  );
-
-  core.debug(`Last released after last sync: ${releasesAfterLastSynced[0]}`);
-
-  if (releasesAfterLastSynced.length === 0) {
-    core.debug(`No releases found after ${lastSyncedRelease}`);
-
-    return;
-  }
-
-  try {
-    await Promise.all(
-      releasesAfterLastSynced.map(release =>
-        client.issues.createLabel({
-          owner: "react-native-community",
-          repo: "upgrade-support",
-          name: release,
-          color: "cfd3d7"
-        })
-      )
-    );
-
-    // The last release is the first entry as the list is sorted backwards
-    const [lastRelease] = releasesAfterLastSynced;
-
-    const {
-      data: { sha }
-    } = await client.repos.getContents({
-      ...fetchFileContentParams,
-      path: ".lastsynced"
-    });
-
-    await client.repos.createOrUpdateFile({
-      ...fetchFileContentParams,
-      content: Buffer.from(lastRelease).toString("base64"),
-      message: "Update release versions",
-      path: ".lastsynced",
-      sha
-    });
-  } catch (error) {
-    core.setFailed(error.message);
-  }
-})();
 
 
 /***/ }),
@@ -8327,6 +8244,16 @@ function addHook (state, kind, name, hook) {
 
 /***/ }),
 
+/***/ 515:
+/***/ (function(module, __unusedexports, __webpack_require__) {
+
+const SemVer = __webpack_require__(65)
+const minor = (a, loose) => new SemVer(a, loose).minor
+module.exports = minor
+
+
+/***/ }),
+
 /***/ 523:
 /***/ (function(module, __unusedexports, __webpack_require__) {
 
@@ -9588,11 +9515,84 @@ exports.getUserAgent = getUserAgent;
 /***/ }),
 
 /***/ 803:
-/***/ (function(module, __unusedexports, __webpack_require__) {
+/***/ (function(__unusedmodule, __unusedexports, __webpack_require__) {
 
-const SemVer = __webpack_require__(65)
-const minor = (a, loose) => new SemVer(a, loose).minor
-module.exports = minor
+const fs = __webpack_require__(747);
+const core = __webpack_require__(470);
+const github = __webpack_require__(469);
+const semver = __webpack_require__(381);
+
+const fetchFileContentParams = {
+  owner: "react-native-community",
+  repo: "upgrade-support"
+};
+
+(async () => {
+  const client = new github.GitHub(
+    core.getInput("github-token", { required: true })
+  );
+
+  const {
+    data: { content }
+  } = await client.repos.getContents({
+    ...fetchFileContentParams,
+    repo: "rn-diff-purge",
+    path: "RELEASES"
+  });
+
+  const lastSyncedRelease = fs.readFileSync(".lastsynced", "utf-8");
+
+  core.debug(`Last synced released: ${lastSyncedRelease}`);
+
+  const releases = Buffer.from(content, "base64")
+    .toString("ascii")
+    .split("\n");
+
+  const releasesAfterLastSynced = releases.filter(
+    release => semver.valid(release) && semver.gt(release, lastSyncedRelease)
+  );
+
+  core.debug(`Last released after last sync: ${releasesAfterLastSynced[0]}`);
+
+  if (releasesAfterLastSynced.length === 0) {
+    core.debug(`No releases found after ${lastSyncedRelease}`);
+
+    return;
+  }
+
+  try {
+    await Promise.all(
+      releasesAfterLastSynced.map(release =>
+        client.issues.createLabel({
+          owner: "react-native-community",
+          repo: "upgrade-support",
+          name: release,
+          color: "cfd3d7"
+        })
+      )
+    );
+
+    // The last release is the first entry as the list is sorted backwards
+    const [lastRelease] = releasesAfterLastSynced;
+
+    const {
+      data: { sha }
+    } = await client.repos.getContents({
+      ...fetchFileContentParams,
+      path: ".lastsynced"
+    });
+
+    await client.repos.createOrUpdateFile({
+      ...fetchFileContentParams,
+      content: Buffer.from(lastRelease).toString("base64"),
+      message: "Update release versions",
+      path: ".lastsynced",
+      sha
+    });
+  } catch (error) {
+    core.setFailed(error.message);
+  }
+})();
 
 
 /***/ }),

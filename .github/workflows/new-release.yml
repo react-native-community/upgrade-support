@@ -1,16 +1,14 @@
-name: Synchronise release versions
+name: Handle new release
 
-on:
-  schedule:
-    - cron: "*/15 * * * *"
+on: repository_dispatch
 
 jobs:
-  sync_releases:
+  new_release:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v1
-      - name: Sync releases
-        uses: ./actions/syncReleases
+      - name: Handle new release
+        uses: ./actions/newRelease
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
