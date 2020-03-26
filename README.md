@@ -1,7 +1,5 @@
 # Upgrade Support
 
-⚠️ **Still work in progress** ⚠️
-
 A central community-backed place to request and give help when upgrading your app.
 
 ## Keep in mind
