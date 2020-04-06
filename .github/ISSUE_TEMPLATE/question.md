@@ -10,11 +10,8 @@ labels: ❔Question
 
 ## Way of upgrading
 
-I used:
-- [ ] [upgrade-helper](https://react-native-community.github.io/upgrade-helper/)
-- [ ] [cli](https://github.com/react-native-community/cli)
-- [ ] Other 
-<!-- If `Other`, please describe below what you used. -->
+- [ ] I used [upgrade-helper](https://react-native-community.github.io/upgrade-helper/) to do my upgrade.
+<!-- If you don't check this box, please describe below what you used to do your upgrade. -->
 
 ## Upgrading version
 
