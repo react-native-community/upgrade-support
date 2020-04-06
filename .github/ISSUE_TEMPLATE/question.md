@@ -8,6 +8,14 @@ labels: ❔Question
 
 <!-- Run `react-native info` in your terminal and paste its contents here. -->
 
+## Way of upgrading
+
+I used:
+- [ ] [upgrade-helper](https://react-native-community.github.io/upgrade-helper/)
+- [ ] [cli](https://github.com/react-native-community/cli)
+- [ ] Other 
+<!-- If `Other`, please describe below what you used. -->
+
 ## Upgrading version
 
 <!-- Specify to which version you are upgrading to. -->
