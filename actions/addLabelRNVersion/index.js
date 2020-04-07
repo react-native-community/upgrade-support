@@ -1,17 +1,20 @@
 const core = require("@actions/core");
 const github = require("@actions/github");
+const semverRcompare = require("semver/functions/rcompare");
 const md2json = require("md-2-json");
 const findVersions = require("find-versions");
 
 // Look for a version on the issue body
-const searchForVersion = upgradingVersionSection => {
+const searchForVersion = (upgradingVersionSection) => {
   const versions = findVersions(upgradingVersionSection, { loose: true });
 
   if (versions.length === 0) {
     return;
   }
 
-  return versions[0];
+  const [latestVersionFound] = versions.sort(semverRcompare);
+
+  return latestVersionFound;
 };
 
 (async () => {
@@ -25,7 +28,7 @@ const searchForVersion = upgradingVersionSection => {
   const { data: updatedIssue } = await client.issues.get({
     owner: issue.owner,
     repo: issue.repo,
-    issue_number: issue.number
+    issue_number: issue.number,
   });
 
   if (updatedIssue.state === "closed") {
@@ -57,7 +60,7 @@ const searchForVersion = upgradingVersionSection => {
     const { data: labels } = await client.issues.listLabelsOnIssue({
       owner: issue.owner,
       repo: issue.repo,
-      issue_number: issue.number
+      issue_number: issue.number,
     });
 
     await Promise.all(
@@ -73,7 +76,7 @@ const searchForVersion = upgradingVersionSection => {
             owner: issue.owner,
             repo: issue.repo,
             issue_number: issue.number,
-            name
+            name,
           });
         }
       })
@@ -83,14 +86,14 @@ const searchForVersion = upgradingVersionSection => {
       await client.issues.getLabel({
         owner: issue.owner,
         repo: issue.repo,
-        name: version
+        name: version,
       });
 
       await client.issues.addLabels({
         owner: issue.owner,
         repo: issue.repo,
         issue_number: issue.number,
-        labels: [version]
+        labels: [version],
       });
     } catch (_error) {
       // Label does not exist, do nothing
