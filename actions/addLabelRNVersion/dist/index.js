@@ -4903,6 +4903,29 @@ const searchForVersion = (upgradingVersionSection) => {
   return latestVersionFound;
 };
 
+const removeAllVersionLabels = async ({ client, issue }) => {
+  const { data: labels } = await client.issues.listLabelsOnIssue({
+    owner: issue.owner,
+    repo: issue.repo,
+    issue_number: issue.number,
+  });
+
+  return Promise.all(
+    labels.map(async ({ name }) => {
+      if (!searchForVersion(name)) {
+        return;
+      }
+
+      return await client.issues.removeLabel({
+        owner: issue.owner,
+        repo: issue.repo,
+        issue_number: issue.number,
+        name,
+      });
+    })
+  );
+};
+
 (async () => {
   const { issue } = github.context;
 
@@ -4993,6 +5016,16 @@ const searchForVersion = (upgradingVersionSection) => {
       return;
     }
   } catch (error) {
+    // Remove all the version labels
+    await removeAllVersionLabels({ client, issue });
+    // And add the _no version_ label
+    await client.issues.addLabels({
+      owner: issue.owner,
+      repo: issue.repo,
+      issue_number: issue.number,
+      labels: [labelForNoVersion],
+    });
+
     core.setFailed(error.message);
   }
 })();
