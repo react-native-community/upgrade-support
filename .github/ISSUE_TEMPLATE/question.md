@@ -8,6 +8,11 @@ labels: ❔Question
 
 <!-- Run `react-native info` in your terminal and paste its contents here. -->
 
+## Things I’ve done to figure out my issue
+
+- [ ] I used [upgrade-helper](https://react-native-community.github.io/upgrade-helper/) to do my upgrade.
+<!-- If you don't check this box, please describe below what you used to do your upgrade. -->
+
 ## Upgrading version
 
 <!-- Specify to which version you are upgrading to. -->
