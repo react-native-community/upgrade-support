@@ -23,7 +23,7 @@ const fetchFileContentParams = {
 
   const lastSyncedRelease = fs.readFileSync(".lastsynced", "utf-8");
 
-  core.debug(`Last synced released: ${lastSyncedRelease}`);
+  core.debug(`Last synced release: ${lastSyncedRelease}`);
 
   const releases = Buffer.from(content, "base64").toString("ascii").split("\n");
 
@@ -31,7 +31,7 @@ const fetchFileContentParams = {
     (release) => semver.valid(release) && semver.gt(release, lastSyncedRelease)
   );
 
-  core.debug(`Last released after last sync: ${releasesAfterLastSynced[0]}`);
+  core.debug(`Last releases after last sync: ${releasesAfterLastSynced[0]}`);
 
   if (releasesAfterLastSynced.length === 0) {
     core.debug(`No releases found after ${lastSyncedRelease}`);
