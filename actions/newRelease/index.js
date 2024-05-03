@@ -5,7 +5,7 @@ const semver = require("semver/preload");
 
 const fetchFileContentParams = {
   owner: "react-native-community",
-  repo: "upgrade-support"
+  repo: "upgrade-support",
 };
 
 (async () => {
@@ -14,23 +14,21 @@ const fetchFileContentParams = {
   );
 
   const {
-    data: { content }
+    data: { content },
   } = await client.repos.getContents({
     ...fetchFileContentParams,
     repo: "rn-diff-purge",
-    path: "RELEASES"
+    path: "RELEASES",
   });
 
   const lastSyncedRelease = fs.readFileSync(".lastsynced", "utf-8");
 
   core.debug(`Last synced released: ${lastSyncedRelease}`);
 
-  const releases = Buffer.from(content, "base64")
-    .toString("ascii")
-    .split("\n");
+  const releases = Buffer.from(content, "base64").toString("ascii").split("\n");
 
   const releasesAfterLastSynced = releases.filter(
-    release => semver.valid(release) && semver.gt(release, lastSyncedRelease)
+    (release) => semver.valid(release) && semver.gt(release, lastSyncedRelease)
   );
 
   core.debug(`Last released after last sync: ${releasesAfterLastSynced[0]}`);
@@ -43,12 +41,12 @@ const fetchFileContentParams = {
 
   try {
     await Promise.all(
-      releasesAfterLastSynced.map(release =>
+      releasesAfterLastSynced.map((release) =>
         client.issues.createLabel({
           owner: "react-native-community",
           repo: "upgrade-support",
           name: release,
-          color: "cfd3d7"
+          color: "cfd3d7",
         })
       )
     );
@@ -57,10 +55,10 @@ const fetchFileContentParams = {
     const [lastRelease] = releasesAfterLastSynced;
 
     const {
-      data: { sha }
+      data: { sha },
     } = await client.repos.getContents({
       ...fetchFileContentParams,
-      path: ".lastsynced"
+      path: ".lastsynced",
     });
 
     await client.repos.createOrUpdateFile({
@@ -68,7 +66,7 @@ const fetchFileContentParams = {
       content: Buffer.from(lastRelease).toString("base64"),
       message: "Update release versions",
       path: ".lastsynced",
-      sha
+      sha,
     });
   } catch (error) {
     core.setFailed(error.message);
